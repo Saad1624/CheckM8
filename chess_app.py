@@ -17,7 +17,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import time
 
-# Import your engine
+# Import your engine (make sure these files are in same directory)
 try:
     from alpha_beta.alpha_beta import NNUEEvaluator, ChessEngine
     ENGINE_AVAILABLE = True
@@ -329,43 +329,38 @@ with st.sidebar:
     
     st.markdown("---")
     # Load FEN
-
     st.subheader("♟ FEN String")
     fen_input = st.text_input(
         "FEN string",
         placeholder="Paste FEN and press Enter...",
         key="fen_input_box"
         )
-    
-    # Check if FEN input changed (Enter was pressed)
     if 'last_fen_input' not in st.session_state:
         st.session_state.last_fen_input = ""
         
-    if fen_input and fen_input != st.session_state.last_fen_input:
+    def load_fen(fen):
         try:
-            # Validate and load
-            test_board = chess.Board(fen_input)
-            st.session_state.board = test_board
+            board = chess.Board(fen)
+            st.session_state.board = board
             st.session_state.move_history = []
             st.session_state.eval_history = []
             st.session_state.engine_move_pending = False
-            st.session_state.last_fen_input = fen_input
+            st.session_state.last_fen_input = fen
             st.success("✅ Position loaded!")
-            time.sleep(0.5)
-            st.rerun()
-        except Exception as e:
-            st.error(f"❌ Invalid FEN")
-            st.session_state.last_fen_input = fen_input
-
+        except Exception:
+            st.error("❌ Invalid FEN")
+            
+    # Trigger loading when input changes
     if fen_input and fen_input != st.session_state.last_fen_input:
-        try_load_fen(fen_input)
+        load_fen(fen_input)
     
     # Load FEN Button
     if st.button("Load FEN", use_container_width=True, key="load_fen_btn"):
         if fen_input:
-            try_load_fen(fen_input)
+            load_fen(fen_input)
         else:
             st.warning("⚠️ Please enter a FEN string first")
+
     
     # Statistics
     if st.session_state.move_history:
@@ -557,5 +552,4 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True
-
 )
