@@ -1,0 +1,1 @@
+A chess engine powered by neural network evaluation and alpha-beta search.
