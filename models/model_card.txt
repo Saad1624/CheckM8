@@ -1,0 +1,54 @@
+================================================================================
+NNUE CHESS POSITION EVALUATOR - MODEL CARD
+================================================================================
+
+MODEL ARCHITECTURE
+--------------------------------------------------------------------------------
+Type: Improved NNUE with Residual Connections
+Total Parameters: 1,303,425
+Input Size: 768 (piece-square) + 16 (advanced features)
+Architecture: 784 → 512 → 384 → 256 → 128 → 64 → 32 → 1
+
+TRAINING CONFIGURATION
+--------------------------------------------------------------------------------
+Epochs: 30
+Batch Size: 2048
+Optimizer: AdamW with weight decay
+Learning Rate: 0.001 (with warmup and scheduling)
+Loss Function: MSE
+Data Augmentation: Position mirroring
+
+PERFORMANCE METRICS
+--------------------------------------------------------------------------------
+Mean Absolute Error:    0.139601
+Root Mean Square Error: 0.221090
+Median Error:           0.074695
+Max Error:              0.964050
+Accuracy (< 5%):        36.81%
+Accuracy (< 10%):       59.69%
+Accuracy (< 20%):       79.07%
+Correlation:            0.808086
+
+TRAINING HISTORY
+--------------------------------------------------------------------------------
+Best Training Loss:   0.037091
+Best Validation Loss: 0.048504
+Final Training MAE:   0.118373
+Final Validation MAE: 0.139387
+
+USAGE EXAMPLE
+--------------------------------------------------------------------------------
+```python
+# Load model
+model = ImprovedNNUE(use_advanced_features=True)
+checkpoint = torch.load('best_nnue_model.pth')
+model.load_state_dict(checkpoint['model_state_dict'])
+model.eval()
+
+# Evaluate position
+fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+score = evaluate_position(model, fen)
+print(f'Position score: {score:.4f}')
+```
+
+================================================================================
