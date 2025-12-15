@@ -1,8 +1,7 @@
 """
 NNUE Chess Engine - Streamlit Web Interface
 ============================================
-A beautiful, interactive web interface for your NNUE chess engine.
-100% Pure Python!
+An interactive web interface for the NNUE chess engine.
 Usage:
     streamlit run chess_app.py
 Then open browser to: http://localhost:8501
@@ -18,7 +17,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import time
 
-# Import your engine (make sure these files are in same directory)
+# Import your engine
 try:
     from alpha_beta.alpha_beta import NNUEEvaluator, ChessEngine
     ENGINE_AVAILABLE = True
@@ -558,4 +557,5 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True
+
 )
